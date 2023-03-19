@@ -10,6 +10,8 @@ import {MatNativeDateModule} from "@angular/material/core";
 import {MatDividerModule} from "@angular/material/divider";
 import {CustomerService} from "../shared/services/customer.service";
 import {MatDialogModule} from "@angular/material/dialog";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ToastrModule} from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -28,7 +30,16 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatDatepickerModule,
     MatNativeDateModule,
     MatDividerModule,
-    MatDialogModule
+    MatDialogModule ,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot(
+      {
+        timeOut: 5000,
+        positionClass: 'toast-bottom-center',
+        progressBar: true,
+        countDuplicates: true
+      }
+    ), // ToastrModule added
   ],
   providers:[
     CustomerService ,

@@ -22,7 +22,7 @@ export interface PeriodicElement {
 })
 export class AppComponent implements OnInit {
   title = 'crud-test-angular-latest';
-
+  tempData : any ;
   columnsTitle: string[] = ['avatar', 'firstname', 'dateOfBirth', 'phoneNumber', 'bankAccountNumber', 'actions'];
   customerData: any;
 
@@ -37,6 +37,18 @@ export class AppComponent implements OnInit {
     this.customerData = JSON.parse(localStorage.getItem('customerData')!);
   }
 
+  onCustomerDialog(data: any, indx: any) {
+    const dialogRef = this.dialog.open(DialogSingleCustomerDialog, {
+      width: '60%',
+      maxWidth: '',
+      maxHeight: '',
+      data: {data, indx}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.getCustomersData();
+    });
+  }
   onViewCustomer(customerData : customer){
     const dialogRef = this.dialog.open(DialogViewCustomerDialog, {
       width: '60%',
@@ -50,18 +62,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  onCustomerDialog(data: any, indx: any) {
-    const dialogRef = this.dialog.open(DialogSingleCustomerDialog, {
-      width: '60%',
-      maxWidth: '',
-      maxHeight: '',
-      data: {data, indx}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.getCustomersData();
-    });
-  }
   onDeleteDialog(index: number, data: customer) {
     const dialogRef = this.dialog.open(DialogDeleteConfirmationDialog, {
       width: '40%',
@@ -73,6 +73,7 @@ export class AppComponent implements OnInit {
       this.getCustomersData();
     });
   }
+
 }
 
 

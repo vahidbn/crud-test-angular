@@ -20,16 +20,23 @@ export class CustomerService {
   }
 
 
-  public createCustomer(data: any): void {
+  public createCustomer(data: any): any {
     if (localStorage.getItem('customerData')) {
-      if (!this.checkForDuplication(data)) {
-        let currentData = JSON.parse(localStorage.getItem('customerData')!);
-        currentData.push(data)
-        localStorage.setItem('customerData', JSON.stringify(currentData));
-        this.dataSubject.next(data);
-      } else {
-        alert('Duplicated')
-      }
+        if (!this.checkForDuplication(data)) {
+            let currentData = JSON.parse(localStorage.getItem('customerData') || '[]');
+            if (Array.isArray(currentData)) {
+              currentData.push(data);
+              localStorage.setItem('customerData', JSON.stringify(currentData));
+              this.dataSubject.next(data);
+            } else {
+              const newData = [data];
+              localStorage.setItem('customerData', JSON.stringify(newData));
+              this.dataSubject.next(data);
+            }
+          return  {status:true , message:'The operation was successful'};
+        } else {
+          return  {status:false , message:'sorry ,The entered customer information is duplicate'};
+        }
     } else {
       const obj = [];
       obj.push(data);
@@ -38,22 +45,20 @@ export class CustomerService {
     }
   };
 
-  public checkForDuplication(newCustomer: customer) {
+  private checkForDuplication(newCustomer: customer) {
     let result: boolean = false;
-    let currentData = JSON.parse(localStorage.getItem('customerData')!);
-    currentData.map(function (customer: customer) {
-
-      if (
-        !result &&
-        customer?.firstname === newCustomer?.firstname &&
-        customer?.lastname === newCustomer?.lastname
-        //  && customer?.dateOfBirth === JSON.stringify(newCustomer?.dateOfBirth)
-      ) {
+    let currentData = JSON.parse(localStorage.getItem('customerData') || '[]');
+    for (let i = 0; i <= currentData?.length - 1; i++) {
+      if (!result &&
+        currentData[i]?.firstname === newCustomer?.firstname &&
+        currentData[i]?.lastname === newCustomer?.lastname) {
         result = true;
       }
-    })
+    }
+
     return result;
   }
+
 
   public readCustomer(index: number) {
     let customerData = JSON.parse(localStorage.getItem('customerData')!);
@@ -76,6 +81,7 @@ export class CustomerService {
     customerData[index].bankAccountNumber = data.bankAccountNumber;
     localStorage.setItem('customerData', JSON.stringify(customerData));
     this.dataSubject.next(data);
+    return 1 ;
     //  }else {
     //   alert('Duplicated')
     // }
@@ -83,10 +89,15 @@ export class CustomerService {
   }
 
   public deleteCustomer(index: number, data: customer) {
-    let customerData = JSON.parse(localStorage.getItem('customerData')!);
-    customerData.splice(index, 1);
-    localStorage.setItem('customerData', JSON.stringify(customerData));
-    this.dataSubject.next(data);
+    try {
+      let customerData = JSON.parse(localStorage.getItem('customerData')!);
+      customerData.splice(index, 1);
+      localStorage.setItem('customerData', JSON.stringify(customerData));
+      this.dataSubject.next(data);
+      return 1
+    }catch (e){
+      return  0
+    }
   };
 
 }

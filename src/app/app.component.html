@@ -2,15 +2,19 @@
 <div  class="container">
 <!--  <span>{{ title }} app is running!</span>-->
   <div class="row">
-    <mat-grid-list cols="2" rowHeight="50px" >
+    <mat-grid-list cols="12" rowHeight="50px"   >
       <mat-grid-tile class="headerTitle">
        <h2>Customers</h2>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="10">
+
       </mat-grid-tile>
       <mat-grid-tile class="actionBtn">
         <button class="addNewCustomer"
                 (click)="onCustomerDialog(null , null)"
                 mat-raised-button color="primary">
-          New Customer
+          <span class="material-icons">person_add</span>
+
         </button>
       </mat-grid-tile>
     </mat-grid-list>
@@ -58,15 +62,15 @@
         </button>
         <mat-menu #menu="matMenu">
           <button mat-menu-item  (click)="onViewCustomer( element)">
-            <mat-icon>dialpad</mat-icon>
+            <mat-icon>visibility</mat-icon>
             <span>View  </span>
           </button>
           <button mat-menu-item (click)="onCustomerDialog(element , indx)" >
-            <mat-icon>voicemail</mat-icon>
+            <mat-icon>edit</mat-icon>
             <span>Edit</span>
           </button>
           <button mat-menu-item (click)="onDeleteDialog(indx ,element)"  >
-            <mat-icon>notifications_off</mat-icon>
+            <mat-icon>delete_forever</mat-icon>
             <span>Delete</span>
           </button>
         </mat-menu>

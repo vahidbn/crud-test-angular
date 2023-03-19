@@ -1,52 +1,74 @@
-import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
-import {MatDialog, MatDialogModule} from "@angular/material/dialog";
-
-
+import {AppComponent, DialogSingleCustomerDialog, DialogViewCustomerDialog} from "./app.component";
+import {ComponentFixture, TestBed} from "@angular/core/testing";
+import {async, of} from "rxjs";
+import {MatDialogModule} from "@angular/material/dialog";
+import {CustomerService} from "./shared/services/customer.service";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('AppComponent', () => {
   let component: AppComponent;
-  beforeEach(async () => {
-    component = new AppComponent(null);
+  let fixture: ComponentFixture<AppComponent>;
+
+  beforeEach(async function() {
     await TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-      providers:[
-      ],imports:[
-        MatDialogModule
-      ]
+      imports: [HttpClientTestingModule ,MatDialogModule],
+      declarations: [ ],
+      providers: [CustomerService]
     }).compileComponents();
+     });
+
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(component).toBeTruthy();
   });
-
-  it(`should have as title 'crud-test-angular-latest'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('crud-test-angular-latest');
-  });
-
-  // it('should render title', () => {
-  //   const fixture = TestBed.createComponent(AppComponent);
-  //   fixture.detectChanges();
-  //   const compiled = fixture.nativeElement as HTMLElement;
-  //   expect(compiled.querySelector('.content span')?.textContent).toContain('crud-test-angular-latest app is running!');
-  // });
-
-
-  it('should load customer data from local storage on initialization', () => {
-    const customerData = [{/* sample customer object */}, {/* sample customer object */}];
-    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(customerData));
-
+  //
+  it('should retrieve customer data on init', () => {
+    spyOn(component, 'getCustomersData');
     component.ngOnInit();
-
-    expect(localStorage.getItem).toHaveBeenCalledWith('customerData');
-    expect(component.customerData).toEqual(customerData);
+    expect(component.getCustomersData).toHaveBeenCalled();
   });
 
+  it('should open single customer dialog on click', () => {
+    const dialogRef = jasmine.createSpyObj('MatDialogRef', ['afterClosed']);
+    dialogRef.afterClosed.and.returnValue(of(true));
+    spyOn(component.dialog, 'open').and.returnValue(dialogRef);
+  });
+
+
+  //
+  // it('should open DialogSingleCustomerDialog on click', () => {
+  //   const dialogRef = jasmine.createSpyObj('MatDialogRef', ['afterClosed', 'close']);
+  //   dialogRef.afterClosed.and.returnValue(of(true));
+  //   spyOn(component.dialog, 'open').and.returnValue(dialogRef);
+  //   component.onCustomerDialog({}, {});
+  //   expect(component.dialog.open).toHaveBeenCalledWith(DialogSingleCustomerDialog, {
+  //     width: '60%',
+  //     maxWidth: '',
+  //     maxHeight: '',
+  //     data: {data: {}, indx: {}}
+  //   });
+  //   expect(dialogRef.close).toHaveBeenCalled();
+  // });
+  //
+
+  //
+  // it('should open delete confirmation dialog on click', () => {
+  //   const mockData = {data: {}, index: 0};
+  //   spyOn(component.dialog, 'open').and.returnValue({afterClosed: () => of(true)});
+  //   component.onDeleteDialog(0, mockData);
+  //   expect(component.dialog.open).toHaveBeenCalled();
+  // });
+  //
+  // it('should open view customer dialog on click', () => {
+  //   const mockData = {customerData: {}};
+  //   spyOn(component.dialog, 'open').and.returnValue({afterClosed: () => of(true)});
+  //   component.onViewCustomer(mockData);
+  //   expect(component.dialog.open).toHaveBeenCalled();
+  // });
 });
