@@ -1,0 +1,62 @@
+<h2>
+  {{ (parentData['data'] !=  null) ? 'Update Customer' :'New Customer'  }}
+</h2>
+<form [formGroup]="userDataForm"  >
+  <mat-form-field class="example-full-width">
+    <mat-label>Firstname</mat-label>
+    <input formControlName="firstname"
+           matInput placeholder="your name">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Lastname</mat-label>
+    <input formControlName="lastname"
+           matInput placeholder="your Family">
+  </mat-form-field>
+
+  <mat-form-field   appearance="fill">
+    <mat-label>Date Of birth </mat-label>
+    <input  formControlName="dateOfBirth" matInput [matDatepicker]="picker1">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>PhoneNumber</mat-label>
+    <input formControlName="phoneNumber"
+           matInput placeholder="with region number +00">
+    <mat-error *ngIf="userDataForm?.controls!['phoneNumber']?.errors?.['isMobileNumber']">
+      Please enter a <strong> valid mobile number</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Email</mat-label>
+    <input formControlName="email"
+           matInput placeholder="name@email.com">
+    <mat-error *ngIf="userDataForm?.controls!['email']?.errors?.['email']">
+      This email is <strong>invalid</strong>.
+    </mat-error>
+    <mat-error *ngIf="userDataForm?.controls!['email']?.errors?.['existEmail']">
+      This email is  <strong> already exist</strong>, please try another email
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Bank Account Number
+      <span *ngIf="userDataForm?.controls!['bankAccountNumber']?.errors?.['minlength']?.['actualLength']">
+         [
+        {{userDataForm?.controls!['bankAccountNumber']?.errors?.['minlength']?.['actualLength']}} /
+        {{userDataForm?.controls!['bankAccountNumber']?.errors?.['minlength']?.['requiredLength']}} ]
+  </span>
+    </mat-label>
+    <input formControlName="bankAccountNumber"
+           matInput placeholder="xxxx-xxxx-xxxx-xxxx">
+  </mat-form-field>
+  <br/>
+  <br/>
+  <button  *ngIf="dialogState  ==='new'"   type="submit" (click)="onSaveData(userDataForm)"   mat-raised-button color="primary" >Add New </button>
+  <button  *ngIf="dialogState  ==='update'"  type="submit" (click)="onSaveData(userDataForm)"   mat-raised-button color="warn">Update</button>
+  <button mat-stroked-button color="primary" [mat-dialog-close]="true">Close</button>
+</form>

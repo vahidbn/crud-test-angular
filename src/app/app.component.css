@@ -2,3 +2,25 @@ table {
   width: 100% !important;
 }
 
+.container {
+  width: 95%;
+  height: 100%;
+  display: block;
+  margin: auto;
+  margin-top: 1%;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+}
+
+ul.pageHeader {
+  list-style: none;
+}
+ul.pageHeader li{
+  float: left;
+}
+.avatar{
+  width:50px ;
+  border-radius: 100%;
+  margin: 5%;
+}
